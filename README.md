@@ -14,6 +14,7 @@ Tato aplikace umožňuje provádět komplexní OSINT analýzu osob na základě 
 - 🔒 **Etické principy** - Respektuje soukromí a používá pouze veřejné zdroje
 - 💻 **Moderní UI** - Responzivní webové rozhraní
 - ⚡ **Rychlé API** - FastAPI backend s asynchronním zpracováním
+- 🌍 **Online deployment** - Streamlit Cloud podpora pro okamžité testování
 
 ## 🏗️ Architektura
 
@@ -94,6 +95,71 @@ python main.py
 ```
 
 Aplikace bude dostupná na: **http://localhost:8000**
+
+## 🌍 Online Deployment (Streamlit Cloud)
+
+**RYCHLÝ START** - Nasaďte aplikaci online během 2 minut! 🚀
+
+### Proč Streamlit?
+
+- ✅ **Zdarma** - Bezplatný hosting
+- ✅ **Jednoduché** - Deployment jedním kliknutím
+- ✅ **Rychlé** - Online během minut
+- ✅ **Sdílitelné** - Veřejná URL adresa
+
+### Postup deploymentu
+
+#### 1. Push kódu na GitHub
+
+```bash
+# Už hotovo! Kód je v repozitáři
+git push origin claude/osint-deep-research-app-013hfUc68VkwLSpbYLhHjQrJ
+```
+
+#### 2. Vytvoření účtu na Streamlit Cloud
+
+- Jděte na [share.streamlit.io](https://share.streamlit.io)
+- Přihlaste se pomocí GitHub účtu
+
+#### 3. Deployment aplikace
+
+1. Klikněte na **"New app"**
+2. Vyberte:
+   - **Repository**: `miloscermak/pruzkum`
+   - **Branch**: `claude/osint-deep-research-app-013hfUc68VkwLSpbYLhHjQrJ`
+   - **Main file path**: `app.py`
+
+3. **Advanced settings** → **Secrets**:
+   ```toml
+   OPENAI_API_KEY = "sk-proj-your-api-key-here"
+   ```
+
+4. Klikněte na **"Deploy"**
+
+#### 4. Hotovo! 🎉
+
+Za 2-3 minuty bude aplikace dostupná na veřejné URL:
+```
+https://your-app-name.streamlit.app
+```
+
+### Streamlit vs FastAPI verze
+
+**Streamlit (`app.py`)** - Pro online deployment:
+```bash
+streamlit run app.py
+```
+- Jednoduchý UI
+- Integrovaný frontend
+- Ideální pro sdílení a testování
+
+**FastAPI (`main.py`)** - Pro produkční API:
+```bash
+python main.py
+```
+- REST API
+- Vlastní frontend (HTML/JS)
+- Lepší pro integraci s jinými systémy
 
 ## 📖 Použití
 
@@ -183,25 +249,39 @@ Aplikace provádí průzkum v následujících oblastech:
 
 ```
 pruzkum/
-├── main.py                 # FastAPI server
+├── app.py                  # Streamlit aplikace (online deployment)
+├── main.py                 # FastAPI server (lokální/produkce)
 ├── osint_researcher.py     # OSINT modul s o3-deep-research
 ├── requirements.txt        # Python závislosti
+├── start.sh                # Startup skript
 ├── .env.example            # Ukázkový konfigurační soubor
 ├── .gitignore              # Git ignore
 ├── README.md               # Dokumentace
+├── .streamlit/
+│   ├── config.toml         # Streamlit konfigurace
+│   └── secrets.toml.example # Ukázka secrets pro deployment
 └── static/
-    └── index.html          # Frontend UI
+    └── index.html          # Frontend UI (pro FastAPI verzi)
 ```
 
 ## 🛠️ Technologie
 
-- **Backend**: FastAPI, Python 3.8+
+- **Frameworks**: Streamlit (online), FastAPI (API), Python 3.8+
 - **AI Model**: OpenAI o3-deep-research-2025-06-26
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript
+- **Frontend**: Streamlit UI / HTML5, CSS3, JavaScript
 - **API Client**: OpenAI Python SDK
-- **Server**: Uvicorn (ASGI)
+- **Server**: Streamlit Cloud / Uvicorn (ASGI)
+- **Deployment**: Streamlit Cloud (zdarma)
 
 ## 🔧 Vývoj
+
+### Lokální testování Streamlit verze
+
+```bash
+streamlit run app.py
+```
+
+Aplikace bude dostupná na: `http://localhost:8501`
 
 ### Testování OSINT modulu
 
@@ -209,7 +289,7 @@ pruzkum/
 python osint_researcher.py
 ```
 
-### Spuštění s auto-reload
+### Spuštění FastAPI s auto-reload
 
 ```bash
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
