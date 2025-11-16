@@ -10,10 +10,8 @@ class OSINTResearcher:
     """
 
     def __init__(self, api_key: str):
-        self.client = AsyncOpenAI(api_key=api_key)
-        # Use GPT-4 Turbo for now - more reliable and available
-        # TODO: Switch to o3-deep-research when API specs are confirmed
-        self.model = "gpt-4-turbo-preview"
+        self.client = AsyncOpenAI(api_key=api_key, timeout=3600)
+        self.model = "o3-deep-research"
 
     async def research_person(self, name: str, details: str = "") -> Dict:
         """
@@ -26,29 +24,23 @@ class OSINTResearcher:
         Returns:
             Dictionary containing research report and metadata
         """
-        # Create comprehensive research prompt
-        research_prompt = self._create_research_prompt(name, details)
+        # Create comprehensive research input combining system prompt and user request
+        research_input = self._create_research_input(name, details)
 
         try:
-            # Use standard chat completions API (works with GPT-4, GPT-4-turbo, etc.)
-            response = await self.client.chat.completions.create(
+            # Use o3-deep-research via Responses API with web search
+            # Background mode is recommended for long-running tasks
+            response = await self.client.responses.create(
                 model=self.model,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": self._get_system_prompt()
-                    },
-                    {
-                        "role": "user",
-                        "content": research_prompt
-                    }
-                ],
-                temperature=0.7,
-                max_tokens=16000
+                input=research_input,
+                background=True,
+                tools=[
+                    {"type": "web_search_preview"}
+                ]
             )
 
-            # Extract the research report
-            report = response.choices[0].message.content
+            # Extract the research report from output_text
+            report = response.output_text if hasattr(response, 'output_text') else str(response)
 
             # Prepare metadata
             metadata = {
@@ -56,7 +48,8 @@ class OSINTResearcher:
                 "model": self.model,
                 "name_searched": name,
                 "details_provided": details,
-                "tokens_used": response.usage.total_tokens if hasattr(response, 'usage') and response.usage else 0
+                "tokens_used": response.usage.total_tokens if hasattr(response, 'usage') and response.usage else 0,
+                "response_id": response.id if hasattr(response, 'id') else None
             }
 
             return {
@@ -112,7 +105,15 @@ Strukturuj svou analýzu do následujících sekcí:
 
 Buď podrobný, analytický a kritický. Upozorňuj na rozpory a neověřené informace."""
 
-    def _create_research_prompt(self, name: str, details: str) -> str:
+    def _create_research_input(self, name: str, details: str) -> str:
+        """Create comprehensive research input for o3-deep-research model"""
+        # Combine system instructions with specific research task
+        system_instructions = self._get_system_prompt()
+        research_task = self._create_research_task(name, details)
+
+        return f"{system_instructions}\n\n{research_task}"
+
+    def _create_research_task(self, name: str, details: str) -> str:
         """Create detailed research prompt"""
         prompt = f"""Proveď komplexní OSINT (Open Source Intelligence) průzkum na následující osobu:
 

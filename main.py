@@ -67,7 +67,7 @@ async def health_check():
     return {
         "status": "healthy",
         "service": "OSINT Deep Research",
-        "model": "gpt-4-turbo-preview"
+        "model": "o3-deep-research"
     }
 
 

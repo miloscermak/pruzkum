@@ -1,16 +1,14 @@
 # 🔍 OSINT Deep Research Application
 
-Pokročilá webová aplikace pro hluboký OSINT (Open Source Intelligence) průzkum osob s využitím AI modelu **GPT-4 Turbo** od OpenAI.
+Pokročilá webová aplikace pro hluboký OSINT (Open Source Intelligence) průzkum osob s využitím AI modelu **o3-deep-research** od OpenAI.
 
 ## 📋 Popis
 
-Tato aplikace umožňuje provádět komplexní OSINT analýzu osob na základě jednoduchého textového zadání (jméno a dodatečné informace). Využívá pokročilý AI model GPT-4 Turbo pro systematický průzkum veřejně dostupných zdrojů a generování strukturovaných reportů.
-
-> **Poznámka**: Aplikace bude upgradována na model o3-deep-research, jakmile bude OpenAI API plně dostupné a zdokumentované.
+Tato aplikace umožňuje provádět komplexní OSINT analýzu osob na základě jednoduchého textového zadání (jméno a dodatečné informace). Využívá pokročilý AI model **o3-deep-research** s přístupem k web search pro systematický průzkum veřejně dostupných zdrojů a generování strukturovaných reportů.
 
 ### ✨ Hlavní funkce
 
-- 🤖 **AI-powered analýza** - Využívá GPT-4 Turbo (přechod na o3-deep-research po vydání API)
+- 🤖 **AI-powered analýza** - Využívá o3-deep-research model s web search capabilities
 - 🌐 **Komplexní OSINT** - Prohledává sociální sítě, profesní profily, registry, média
 - 📊 **Strukturované reporty** - Přehledné výsledky s ověřením zdrojů
 - 🔒 **Etické principy** - Respektuje soukromí a používá pouze veřejné zdroje
@@ -269,9 +267,9 @@ pruzkum/
 ## 🛠️ Technologie
 
 - **Frameworks**: Streamlit (online), FastAPI (API), Python 3.8+
-- **AI Model**: GPT-4 Turbo (o3-deep-research po vydání API)
+- **AI Model**: OpenAI o3-deep-research s web search
 - **Frontend**: Streamlit UI / HTML5, CSS3, JavaScript
-- **API Client**: OpenAI Python SDK
+- **API Client**: OpenAI Python SDK (Responses API)
 - **Server**: Streamlit Cloud / Uvicorn (ASGI)
 - **Deployment**: Streamlit Cloud (zdarma)
 
@@ -299,10 +297,11 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 ## ⚠️ Upozornění
 
-- Model o3-deep-research je pokročilý a nákladný - sledujte využití tokenů
-- Průzkum může trvat 30-120 sekund v závislosti na množství dat
-- Vždy používejte aplikaci v souladu s platnými zákony a předpisy
-- Respektujte soukromí a používejte pouze pro legitimní účely
+- Model **o3-deep-research** je pokročilý výzkumný model - **průzkum může trvat několik minut** (běží v background módu)
+- Model je **nákladný** - sledujte využití tokenů a počet dotazů
+- Průzkum používá **web search** - prohledává skutečné webové zdroje v reálném čase
+- Vždy používejte aplikaci v souladu s **platnými zákony** a předpisy
+- Respektujte soukromí a používejte pouze pro **legitimní účely**
 
 ## 📝 Licence
 
