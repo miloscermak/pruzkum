@@ -35,12 +35,11 @@ class OSINTResearcher:
             # Note: o3-deep-research uses v1/responses endpoint, not chat completions
             response = await self.client.responses.create(
                 model=self.model,
-                prompt=full_prompt,
-                max_tokens=16000
+                prompt=full_prompt
             )
 
             # Extract the research report
-            report = response.output
+            report = response.output if hasattr(response, 'output') else str(response)
 
             # Prepare metadata
             metadata = {
