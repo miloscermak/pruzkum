@@ -28,25 +28,19 @@ class OSINTResearcher:
         research_prompt = self._create_research_prompt(name, details)
 
         try:
-            # Use o3-deep-research model for comprehensive analysis
-            response = await self.client.chat.completions.create(
+            # Combine system and user prompts for o3-deep-research
+            full_prompt = f"{self._get_system_prompt()}\n\n{research_prompt}"
+
+            # Use o3-deep-research model via responses API
+            # Note: o3-deep-research uses v1/responses endpoint, not chat completions
+            response = await self.client.responses.create(
                 model=self.model,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": self._get_system_prompt()
-                    },
-                    {
-                        "role": "user",
-                        "content": research_prompt
-                    }
-                ],
-                temperature=0.7,
+                prompt=full_prompt,
                 max_tokens=16000
             )
 
             # Extract the research report
-            report = response.choices[0].message.content
+            report = response.output
 
             # Prepare metadata
             metadata = {
@@ -54,7 +48,7 @@ class OSINTResearcher:
                 "model": self.model,
                 "name_searched": name,
                 "details_provided": details,
-                "tokens_used": response.usage.total_tokens if response.usage else 0
+                "tokens_used": response.usage.total_tokens if hasattr(response, 'usage') and response.usage else 0
             }
 
             return {
