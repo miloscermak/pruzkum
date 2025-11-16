@@ -124,7 +124,7 @@ with st.sidebar:
 
     # Model info
     st.markdown("### 🤖 Model")
-    st.info("**o3-deep-research-2025-06-26**")
+    st.info("**GPT-4 Turbo**\n\n(Přechod na o3-deep-research až bude API dostupné)")
 
     st.markdown("---")
 
@@ -218,7 +218,7 @@ with tab1:
         with col1:
             st.metric("Vyhledáno", meta['name_searched'])
         with col2:
-            st.metric("Model", "o3-deep-research")
+            st.metric("Model", meta.get('model', 'GPT-4 Turbo'))
         with col3:
             st.metric("Tokeny", f"{meta['tokens_used']:,}")
         with col4:

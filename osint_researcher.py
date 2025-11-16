@@ -11,7 +11,9 @@ class OSINTResearcher:
 
     def __init__(self, api_key: str):
         self.client = AsyncOpenAI(api_key=api_key)
-        self.model = "o3-deep-research-2025-06-26"
+        # Use GPT-4 Turbo for now - more reliable and available
+        # TODO: Switch to o3-deep-research when API specs are confirmed
+        self.model = "gpt-4-turbo-preview"
 
     async def research_person(self, name: str, details: str = "") -> Dict:
         """
@@ -28,27 +30,25 @@ class OSINTResearcher:
         research_prompt = self._create_research_prompt(name, details)
 
         try:
-            # Use o3-deep-research model via responses API
-            # Note: o3-deep-research uses v1/responses endpoint with specific format
-            response = await self.client.responses.create(
+            # Use standard chat completions API (works with GPT-4, GPT-4-turbo, etc.)
+            response = await self.client.chat.completions.create(
                 model=self.model,
-                prompt={
-                    "type": "text",
-                    "text": f"{self._get_system_prompt()}\n\n{research_prompt}"
-                }
+                messages=[
+                    {
+                        "role": "system",
+                        "content": self._get_system_prompt()
+                    },
+                    {
+                        "role": "user",
+                        "content": research_prompt
+                    }
+                ],
+                temperature=0.7,
+                max_tokens=16000
             )
 
             # Extract the research report
-            # Response structure varies, try multiple possible locations
-            if hasattr(response, 'output'):
-                if isinstance(response.output, list) and len(response.output) > 0:
-                    report = response.output[0].get('text', str(response.output[0]))
-                else:
-                    report = str(response.output)
-            elif hasattr(response, 'text'):
-                report = response.text
-            else:
-                report = str(response)
+            report = response.choices[0].message.content
 
             # Prepare metadata
             metadata = {

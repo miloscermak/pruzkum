@@ -1,14 +1,16 @@
 # 🔍 OSINT Deep Research Application
 
-Pokročilá webová aplikace pro hluboký OSINT (Open Source Intelligence) průzkum osob s využitím AI modelu **o3-deep-research-2025-06-26** od OpenAI.
+Pokročilá webová aplikace pro hluboký OSINT (Open Source Intelligence) průzkum osob s využitím AI modelu **GPT-4 Turbo** od OpenAI.
 
 ## 📋 Popis
 
-Tato aplikace umožňuje provádět komplexní OSINT analýzu osob na základě jednoduchého textového zadání (jméno a dodatečné informace). Využívá pokročilý model o3-deep-research pro systematický průzkum veřejně dostupných zdrojů a generování strukturovaných reportů.
+Tato aplikace umožňuje provádět komplexní OSINT analýzu osob na základě jednoduchého textového zadání (jméno a dodatečné informace). Využívá pokročilý AI model GPT-4 Turbo pro systematický průzkum veřejně dostupných zdrojů a generování strukturovaných reportů.
+
+> **Poznámka**: Aplikace bude upgradována na model o3-deep-research, jakmile bude OpenAI API plně dostupné a zdokumentované.
 
 ### ✨ Hlavní funkce
 
-- 🤖 **AI-powered analýza** - Využívá nejnovější model o3-deep-research od OpenAI
+- 🤖 **AI-powered analýza** - Využívá GPT-4 Turbo (přechod na o3-deep-research po vydání API)
 - 🌐 **Komplexní OSINT** - Prohledává sociální sítě, profesní profily, registry, média
 - 📊 **Strukturované reporty** - Přehledné výsledky s ověřením zdrojů
 - 🔒 **Etické principy** - Respektuje soukromí a používá pouze veřejné zdroje
@@ -267,7 +269,7 @@ pruzkum/
 ## 🛠️ Technologie
 
 - **Frameworks**: Streamlit (online), FastAPI (API), Python 3.8+
-- **AI Model**: OpenAI o3-deep-research-2025-06-26
+- **AI Model**: GPT-4 Turbo (o3-deep-research po vydání API)
 - **Frontend**: Streamlit UI / HTML5, CSS3, JavaScript
 - **API Client**: OpenAI Python SDK
 - **Server**: Streamlit Cloud / Uvicorn (ASGI)
