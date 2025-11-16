@@ -29,18 +29,37 @@ class OSINTResearcher:
 
         try:
             # Use o3-deep-research via Responses API with web search
-            # Background mode is recommended for long-running tasks
+            # Note: Not using background mode to wait for completion in Streamlit
             response = await self.client.responses.create(
                 model=self.model,
                 input=research_input,
-                background=True,
                 tools=[
                     {"type": "web_search_preview"}
                 ]
             )
 
             # Extract the research report from output_text
-            report = response.output_text if hasattr(response, 'output_text') else str(response)
+            # Debug: Check what attributes the response has
+            if hasattr(response, 'output_text'):
+                report = response.output_text
+            elif hasattr(response, 'output'):
+                # Try output array format
+                if isinstance(response.output, list) and len(response.output) > 0:
+                    # Look for message type in output
+                    for item in response.output:
+                        if hasattr(item, 'type') and item.type == 'message':
+                            if hasattr(item, 'content') and isinstance(item.content, list):
+                                for content_item in item.content:
+                                    if hasattr(content_item, 'type') and content_item.type == 'output_text':
+                                        report = content_item.text
+                                        break
+                            break
+                    else:
+                        report = str(response.output)
+                else:
+                    report = str(response.output)
+            else:
+                report = f"DEBUG - Response structure: {dir(response)}\n\nFull response: {str(response)}"
 
             # Prepare metadata
             metadata = {

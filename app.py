@@ -193,7 +193,7 @@ with tab1:
                 st.error("❌ Prosím, zadejte platné jméno (min. 2 znaky).")
             else:
                 # Conduct research
-                with st.spinner("🔄 Probíhá hluboký OSINT průzkum... Může to trvat 30-120 sekund."):
+                with st.spinner("🔄 Probíhá hluboký OSINT průzkum s web search... Může to trvat 2-10 minut. Prosím čekejte..."):
                     try:
                         # Run async function
                         result = asyncio.run(conduct_research(name, details, api_key))
