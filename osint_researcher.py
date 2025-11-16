@@ -28,18 +28,27 @@ class OSINTResearcher:
         research_prompt = self._create_research_prompt(name, details)
 
         try:
-            # Combine system and user prompts for o3-deep-research
-            full_prompt = f"{self._get_system_prompt()}\n\n{research_prompt}"
-
             # Use o3-deep-research model via responses API
-            # Note: o3-deep-research uses v1/responses endpoint, not chat completions
+            # Note: o3-deep-research uses v1/responses endpoint with specific format
             response = await self.client.responses.create(
                 model=self.model,
-                prompt=full_prompt
+                prompt={
+                    "type": "text",
+                    "text": f"{self._get_system_prompt()}\n\n{research_prompt}"
+                }
             )
 
             # Extract the research report
-            report = response.output if hasattr(response, 'output') else str(response)
+            # Response structure varies, try multiple possible locations
+            if hasattr(response, 'output'):
+                if isinstance(response.output, list) and len(response.output) > 0:
+                    report = response.output[0].get('text', str(response.output[0]))
+                else:
+                    report = str(response.output)
+            elif hasattr(response, 'text'):
+                report = response.text
+            else:
+                report = str(response)
 
             # Prepare metadata
             metadata = {
